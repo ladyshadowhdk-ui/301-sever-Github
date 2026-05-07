@@ -9,10 +9,10 @@ cd ~/Project/1_Github || {
 echo "📁 当前目录：$(pwd)"
 
 # 设置 Git 用户名和邮箱
-git config --global user.name "ladyshadowhdk-ui"
-git config --global user.email "ladyshadowhdk@gmail.com"
+git config user.name "ladyshadowhdk-ui"
+git config user.email "ladyshadowhdk@gmail.com"
 
-echo "👤 Git 用户：$(git config --global user.name) <$(git config --global user.email)>"
+echo "👤 Git 用户：$(git config user.name) <$(git config user.email)>"
 
 # 检查是否是 Git 仓库
 if [ ! -d ".git" ]; then
@@ -35,7 +35,7 @@ git status
 # 添加所有变化
 git add .
 
-# 如果没有新的文件变化，就直接尝试推送已有 commit
+# 如果有新变化，就提交；如果没有，就直接推送已有 commit
 if git diff --cached --quiet; then
     echo "ℹ️ 没有新的文件变化需要提交，尝试推送已有提交..."
 else
@@ -45,10 +45,19 @@ else
 fi
 
 echo "⬆️ 正在推送到 GitHub..."
+
+# 清除 VS Code Remote SSH 的 Git 凭据代理，避免 socket 失效导致认证失败
+unset GIT_ASKPASS
+unset SSH_ASKPASS
+unset VSCODE_GIT_ASKPASS_NODE
+unset VSCODE_GIT_ASKPASS_EXTRA_ARGS
+unset VSCODE_GIT_ASKPASS_MAIN
+
 git push -u origin main
 
 if [ $? -eq 0 ]; then
     echo "✅ 更新完成！"
 else
-    echo "❌ 推送失败，请检查 GitHub 登录/token 权限"
+    echo "❌ 推送失败"
+    echo "请确认你输入的是 GitHub Personal Access Token，不是 GitHub 密码"
 fi
