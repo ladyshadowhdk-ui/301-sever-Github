@@ -8,6 +8,12 @@ cd ~/Project/1_Github || {
 
 echo "📁 当前目录：$(pwd)"
 
+# 设置 Git 用户名和邮箱
+git config user.name "ladyshadowhdk-ui"
+git config user.email "ladyshadowhdk@gmail.com"
+
+echo "👤 Git 用户：$(git config user.name) <$(git config user.email)>"
+
 # 检查是否是 Git 仓库
 if [ ! -d ".git" ]; then
     echo "❌ 当前目录不是 Git 仓库，请先执行 git init"
@@ -29,19 +35,20 @@ git status
 # 添加所有变化
 git add .
 
-# 如果没有变化，就退出
+# 如果没有新的文件变化，就直接尝试推送已有 commit
 if git diff --cached --quiet; then
-    echo "✅ 没有新的文件变化需要提交"
-    exit 0
+    echo "ℹ️ 没有新的文件变化需要提交，尝试推送已有提交..."
+else
+    COMMIT_MSG="Update server files $(date '+%Y-%m-%d %H:%M:%S')"
+    echo "📝 正在提交：$COMMIT_MSG"
+    git commit -m "$COMMIT_MSG"
 fi
-
-# 自动生成提交信息
-COMMIT_MSG="Update server files $(date '+%Y-%m-%d %H:%M:%S')"
-
-echo "📝 正在提交：$COMMIT_MSG"
-git commit -m "$COMMIT_MSG"
 
 echo "⬆️ 正在推送到 GitHub..."
 git push -u origin main
 
-echo "✅ 更新完成！"
+if [ $? -eq 0 ]; then
+    echo "✅ 更新完成！"
+else
+    echo "❌ 推送失败，请检查 GitHub 登录/token 权限"
+fi
