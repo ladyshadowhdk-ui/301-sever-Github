@@ -9,10 +9,10 @@ cd ~/Project/1_Github || {
 echo "📁 当前目录：$(pwd)"
 
 # 设置 Git 用户名和邮箱
-git config user.name "ladyshadowhdk-ui"
-git config user.email "ladyshadowhdk@gmail.com"
+git config --global user.name "ladyshadowhdk-ui"
+git config --global user.email "ladyshadowhdk@gmail.com"
 
-echo "👤 Git 用户：$(git config user.name) <$(git config user.email)>"
+echo "👤 Git 用户：$(git config --global user.name) <$(git config --global user.email)>"
 
 # 检查是否是 Git 仓库
 if [ ! -d ".git" ]; then
